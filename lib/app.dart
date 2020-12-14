@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:pow_pal_app/models/station.dart';
 
-Future<List<Station>> fetchStation() async {
+fetchStation() async {
   final response = 
-    await http.get(Uri.encodeFull('http://127.0.0.1:8000/stations/'), headers:{"Accept":"application/json"});
+    await Dio().get('http://127.0.0.1:8000/stations/');
 
   if(response.statusCode == 200) { 
     // If the server did return a 200 OK response,
     // then parse the JSON.
-    return userFromJson(response.body);
+    return response.data;
   }else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
@@ -65,15 +66,28 @@ class App extends StatefulWidget {
 
 class AppState extends State<App> { 
 
+TextEditingController editingController = TextEditingController();
 final String url = '';
-Future<List<Station>> futureStation;
+List futureStation = [];
+List filteredStation = [];
 
 @override
 void initState() { 
   super.initState();
-  futureStation = fetchStation();
+  fetchStation().then((data){
+      setState(() {
+        futureStation = filteredStation = data;
+      });
+  });
 }
 
+void _filterStations(value) { 
+  setState(() {
+    filteredStation = futureStation
+      .where((station) => 
+        station['name'].toLowerCase().contains(value.toLowerCase())).toList();
+  });
+}
 
   @override
   Widget build(BuildContext context) { 
@@ -88,35 +102,53 @@ void initState() {
         appBar: AppBar(  
           title: Text('Snow Stations'),
         ),
-        body: Center(  
-          child: FutureBuilder<List<Station>>(  
-            future: futureStation,
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (snapshot.hasData) { 
-                return ListView.builder(
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(  
-                      title: Text(snapshot.data[index].name),
-                      onTap: () {
-                        Navigator.push( 
-                          context,
-                          new MaterialPageRoute(  
-                            builder: (context) =>
-                              DetailPage(snapshot.data[index])
-                          )
-                        );
-                      },
-                    );
-                  }
-                );
-              } else if (snapshot.hasError) { 
-                return Text("${snapshot.error}");
-              }
-
-              // by default show a loading spinner.
-              return CircularProgressIndicator();
-            }
+        body: Container(  
+          child: Column(  
+            children: <Widget>[
+              Padding(  
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(  
+                  onChanged: (value) {
+                    _filterStations(value);
+                  },
+                  controller: editingController,
+                  decoration: InputDecoration(  
+                    labelText: "Search",
+                    hintText: "Search",
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(  
+                      borderRadius: BorderRadius.all(Radius.circular(25.0))
+                    )
+                  ),
+                )
+              ),
+              Expanded(  
+                child: filteredStation.length > 0 ? ListView.builder(
+                        itemCount: filteredStation.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return ListTile(  
+                            title: Text(filteredStation[index]['name']),
+                            onTap: () {
+                              Navigator.push( 
+                                context,
+                                new MaterialPageRoute(  
+                                  builder: (context) =>
+                                    DetailPage(filteredStation[index]['name'],
+                                              filteredStation[index]['id'],
+                                              filteredStation[index]['start_snow_water_eq'],
+                                              filteredStation[index]['change_snow_water_eq'],
+                                              filteredStation[index]['start_snow_depth'],
+                                              filteredStation[index]['change_snow_depth'],
+                                              )
+                                )
+                              );
+                            },
+                          );
+                        }):Center(
+                          child: CircularProgressIndicator(),
+                        ) 
+              )
+            ],
           )
         )
       )
@@ -125,13 +157,23 @@ void initState() {
 }
 
 class DetailPage extends StatefulWidget {
-  final Station station;
+  final int id;
+  final String name;
+  final double startSnowWaterEq;
+  final double changeInSnowWaterEq;
+  final double startSnowDepth;
+  final double changeSnowDepth; 
 
-  DetailPage(this.station);
+  DetailPage(this.name, 
+        this.id, 
+        this.startSnowWaterEq, 
+        this.changeInSnowWaterEq, 
+        this.startSnowDepth, 
+        this.changeSnowDepth);
 
   @override
   _DetailPageState createState() => _DetailPageState();
-
+  
 }
 
 class _DetailPageState extends State<DetailPage> { 
@@ -139,7 +181,7 @@ class _DetailPageState extends State<DetailPage> {
   Widget build(BuildContext context) { 
     return Scaffold(  
       appBar: AppBar(  
-        title: Text(widget.station.name),
+        title: Text(widget.name),
       ),
       body: Container( 
         padding: EdgeInsets.fromLTRB(10,10,10,0),
@@ -165,12 +207,12 @@ class _DetailPageState extends State<DetailPage> {
                                 padding: const EdgeInsets.only(left: 15.0),
                                 child: RichText(  
                                   text: TextSpan(   
-                                    text: widget.station.name,
+                                    text: widget.name,
                                     style: TextStyle(  
                                       fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),
                                       children: <TextSpan>[ 
                                         TextSpan(   
-                                          text: '\n ID: ' + widget.station.id.toString(),
+                                          text: '\n ID: ' + widget.id.toString(),
                                           style: TextStyle(  
                                             color: Colors.grey,
                                             fontSize: 15,
@@ -186,7 +228,7 @@ class _DetailPageState extends State<DetailPage> {
                           Padding(
                             padding: EdgeInsets.fromLTRB(0, 20, 0, 5),
                             child: Text(
-                              'Start of day snow water Eq\n ' + widget.station.startSnowWaterEq.toString(),
+                              'Start of day snow water Eq\n ' + widget.startSnowWaterEq.toString(),
                               textAlign: TextAlign.center,
                               style: TextStyle(fontSize: 22),
                               ),
@@ -194,15 +236,15 @@ class _DetailPageState extends State<DetailPage> {
                           Padding(
                             padding: EdgeInsets.fromLTRB(0, 20, 0, 5),
                             child: Text(
-                              'Change in Snow Water Eq\n ' + widget.station.changeInSnowWaterEq.toString(),
+                              'Change in Snow Water Eq\n ' + widget.changeInSnowWaterEq.toString(),
                               textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 22, color: getColor(widget.station.startSnowWaterEq, widget.station.changeInSnowWaterEq)),
+                              style: TextStyle(fontSize: 22, color: getColor(widget.startSnowWaterEq, widget.changeInSnowWaterEq)),
                               ),
                           ),
                           Padding(
                             padding: EdgeInsets.fromLTRB(0, 20, 0, 5),
                             child: Text(
-                              'Snow Depth Start of Day\n ' + widget.station.startSnowDepth.toString(),
+                              'Snow Depth Start of Day\n ' + widget.startSnowDepth.toString(),
                               textAlign: TextAlign.center,
                               style: TextStyle(fontSize: 22),
                               ),
@@ -210,9 +252,9 @@ class _DetailPageState extends State<DetailPage> {
                           Padding(
                             padding: EdgeInsets.fromLTRB(0, 20, 0, 5),
                             child: Text(
-                              'Change in Snow Depth\n ' + widget.station.changeSnowDepth.toString(),
+                              'Change in Snow Depth\n ' + widget.changeSnowDepth.toString(),
                               textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 22, color: getColor(widget.station.startSnowDepth, widget.station.changeSnowDepth)),
+                              style: TextStyle(fontSize: 22, color: getColor(widget.startSnowDepth, widget.changeSnowDepth)),
                               ),
                           ),
                         ],
