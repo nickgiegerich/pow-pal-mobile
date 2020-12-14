@@ -1,4 +1,11 @@
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+
+
 class Station { 
+  final Map<String, dynamic> data;
   final int id;
   final String name;
   final double startSnowWaterEq;
@@ -6,32 +13,52 @@ class Station {
   final double startSnowDepth;
   final double changeSnowDepth;
 
-  Station(this.name, 
+  Station(
+          {this.data,
+          this.name, 
           this.id, 
           this.startSnowWaterEq, 
           this.changeInSnowWaterEq, 
           this.startSnowDepth, 
-          this.changeSnowDepth);
+          this.changeSnowDepth});
   
-  static List<Station> fetchAll() { 
-    return [
-      Station('Alpine Meadows',908,7.9,0.5,20,2),
-      Station('Beaver Pass',990,9.5,0.0,0.0,0.0),
-      Station('Blewett Pass',352,2.7,0.1,8,2),
-      Station('Brown Top',1080,15.2,0.0,47,2),
-      Station('Buckinghorse',1107,10.5,-0.2,33,1),
-    ];
+  factory Station.fromJson(Map<String, dynamic> json) { 
+    return Station(
+      data: {
+        'name': json['name'],
+        'id': json['id'],
+        'startSnowWaterEq': json['start_snow_water_eq'],
+        'changeInSnowWaterEq': json['change_snow_water_eq'],
+        'startSnowDepth': json['start_snow_depth'],
+        'changeSnowDepth': json['change_snow_depth'],
+      }
+    );
   }
 
-  static Station fetchByID(int stationID) { 
-    List<Station> stations = Station.fetchAll();
-    for (var i = 0; i < stations.length; i++) { 
-      if (stations[i].id == stationID) { 
-        return stations[i];
-      }
-    }
-      return null;
-  }
+  // static Station fetchByID(int stationID) { 
+  //   List<Station> stations = Station.fetchAll();
+  //   for (var i = 0; i < stations.length; i++) { 
+  //     if (stations[i].id == stationID) { 
+  //       return stations[i];
+  //     }
+  //   }
+  //     return null;
+  // }
+
+// Future<Station> fetchStation() async {
+//   final response =
+//       await http.get('https://jsonplaceholder.typicode.com/albums/1');
+
+//   if (response.statusCode == 200) {
+//     // If the server did return a 200 OK response,
+//     // then parse the JSON.
+//     return Station.fromJson(jsonDecode(response.body));
+//   } else {
+//     // If the server did not return a 200 OK response,
+//     // then throw an exception.
+//     throw Exception('Failed to load album');
+//   }
+// }
 }
  
 
