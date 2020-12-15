@@ -1,22 +1,89 @@
-// import 'dart:ffi';
+import 'package:flutter/material.dart';
+import '../../api_calls/fetch_all_stations.dart';
+import '../../models/station.dart';
+import '../station_detail/station_detail.dart';
 
-// import 'package:flutter/material.dart';
-// import '../../app.dart';
-// import '../../models/station.dart';
+// ignore: must_be_immutable
+class Stations extends StatefulWidget { 
+  List<Station> stations;
 
-// class Stations extends StatelessWidget {
-// final List<Station> station;
+  Stations(this.stations);
 
-// Stations(this.station);
+  @override
+  _StationsPageState createState() => _StationsPageState();
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding( 
-      
-//     );
-//   }
+}
 
-//   // _onLocationTap(BuildContext context, stationID) {
-//   //   Navigator.pushNamed(context, StationDetailRoute, arguments: {'id': stationID});
-//   // }
-// }
+class _StationsPageState extends State<Stations> { 
+  TextEditingController editingController = TextEditingController();
+  List<Station> filteredStation;
+  @override
+  void initState() { 
+    super.initState();
+    fetchAllStations().then((data){
+        setState(() {
+          widget.stations = filteredStation = data;
+        });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) { 
+    return Scaffold(  
+        appBar: AppBar(  
+          title: Text('Snotel Stations'),
+        ),
+        body: Container(  
+          child: Column(  
+            children: <Widget>[
+              Padding(  
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(  
+                  onChanged: (value) {
+                    _filterStations(value);
+                  },
+                  controller: editingController,
+                  decoration: InputDecoration(  
+                    labelText: "Search",
+                    hintText: "Search",
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(  
+                      borderRadius: BorderRadius.all(Radius.circular(25.0))
+                    )
+                  ),
+                )
+              ),
+              Expanded(  
+                child: widget.stations.length > 0 ? ListView.builder(
+                        itemCount: widget.stations.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return ListTile(  
+                            title: Text(widget.stations[index].name),
+                            onTap: () {
+                              Navigator.push( 
+                                context,
+                                new MaterialPageRoute(  
+                                  builder: (context) =>
+                                    StationDetail(widget.stations[index])
+                                )
+                              );
+                            },
+                          );
+                        }):Center(
+                          child: CircularProgressIndicator(),
+                        ) 
+              )
+            ],
+          )
+        )
+      );
+  }
+
+  void _filterStations(value) { 
+    setState(() {
+      widget.stations = filteredStation
+      .where((station) => 
+        station.name.toLowerCase().contains(value.toLowerCase())).toList();
+    });
+  }
+}
