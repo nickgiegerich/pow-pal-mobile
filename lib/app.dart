@@ -4,77 +4,24 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:pow_pal_app/models/station.dart';
-
-fetchStation() async {
-  final response = 
-    await Dio().get('http://127.0.0.1:8000/stations/');
-
-  if(response.statusCode == 200) { 
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    return response.data;
-  }else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load stations');
-  }
-}
-
-List<Station> userFromJson(String str) => List<Station>.from(json.decode(str).map((x) => Station.fromJson(x)));
-String userToJson(List<Station> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
-
-
-class Station {
-  final int id;
-  final String name;
-  final double startSnowWaterEq;
-  final double changeInSnowWaterEq;
-  final double startSnowDepth;
-  final double changeSnowDepth;
-
-  Station(
-        {this.name, 
-        this.id, 
-        this.startSnowWaterEq, 
-        this.changeInSnowWaterEq, 
-        this.startSnowDepth, 
-        this.changeSnowDepth});
-  
-  factory Station.fromJson(Map<String, dynamic> json) => Station( 
-      id : json['id'], 
-      name : json['name'],
-      startSnowWaterEq : json['start_snow_water_eq'], 
-      changeInSnowWaterEq : json['change_snow_water_eq'],
-      startSnowDepth : json['start_snow_depth'],
-      changeSnowDepth : json['change_snow_depth'],
-  );
-
-  Map<String, dynamic> toJson() => {
-    'id' : id,
-    'name' : name,
-    'startSnowWaterEq' : startSnowWaterEq,
-    'changeInSnowWaterEq' : changeInSnowWaterEq,
-    'startSnowDepth' : startSnowDepth,
-    'changeSnowDepth' : changeSnowDepth,
-  };
-}
+import 'api_calls/fetch_all_stations.dart';
+import 'models/station.dart';
 
 class App extends StatefulWidget { 
   @override
   AppState createState() => new AppState();
 }
 
-class AppState extends State<App> { 
+class AppState extends State<App> {
 
 TextEditingController editingController = TextEditingController();
-final String url = '';
-List futureStation = [];
-List filteredStation = [];
+List<Station> futureStation = [];
+List<Station> filteredStation = [];
 
 @override
 void initState() { 
   super.initState();
-  fetchStation().then((data){
+  fetchAllStations().then((data){
       setState(() {
         futureStation = filteredStation = data;
       });
@@ -85,7 +32,7 @@ void _filterStations(value) {
   setState(() {
     filteredStation = futureStation
       .where((station) => 
-        station['name'].toLowerCase().contains(value.toLowerCase())).toList();
+        station.name.toLowerCase().contains(value.toLowerCase())).toList();
   });
 }
 
@@ -127,19 +74,13 @@ void _filterStations(value) {
                         itemCount: filteredStation.length,
                         itemBuilder: (BuildContext context, int index) {
                           return ListTile(  
-                            title: Text(filteredStation[index]['name']),
+                            title: Text(filteredStation[index].name),
                             onTap: () {
                               Navigator.push( 
                                 context,
                                 new MaterialPageRoute(  
                                   builder: (context) =>
-                                    DetailPage(filteredStation[index]['name'],
-                                              filteredStation[index]['id'],
-                                              filteredStation[index]['start_snow_water_eq'],
-                                              filteredStation[index]['change_snow_water_eq'],
-                                              filteredStation[index]['start_snow_depth'],
-                                              filteredStation[index]['change_snow_depth'],
-                                              )
+                                    DetailPage(filteredStation[index])
                                 )
                               );
                             },
@@ -157,19 +98,9 @@ void _filterStations(value) {
 }
 
 class DetailPage extends StatefulWidget {
-  final int id;
-  final String name;
-  final double startSnowWaterEq;
-  final double changeInSnowWaterEq;
-  final double startSnowDepth;
-  final double changeSnowDepth; 
+  final Station station;
 
-  DetailPage(this.name, 
-        this.id, 
-        this.startSnowWaterEq, 
-        this.changeInSnowWaterEq, 
-        this.startSnowDepth, 
-        this.changeSnowDepth);
+  DetailPage(this.station);
 
   @override
   _DetailPageState createState() => _DetailPageState();
@@ -181,7 +112,7 @@ class _DetailPageState extends State<DetailPage> {
   Widget build(BuildContext context) { 
     return Scaffold(  
       appBar: AppBar(  
-        title: Text(widget.name),
+        title: Text(widget.station.name),
       ),
       body: Container( 
         padding: EdgeInsets.fromLTRB(10,10,10,0),
@@ -207,12 +138,12 @@ class _DetailPageState extends State<DetailPage> {
                                 padding: const EdgeInsets.only(left: 15.0),
                                 child: RichText(  
                                   text: TextSpan(   
-                                    text: widget.name,
+                                    text: widget.station.name,
                                     style: TextStyle(  
                                       fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),
                                       children: <TextSpan>[ 
                                         TextSpan(   
-                                          text: '\n ID: ' + widget.id.toString(),
+                                          text: '\n ID: ' + widget.station.id.toString(),
                                           style: TextStyle(  
                                             color: Colors.grey,
                                             fontSize: 15,
@@ -228,7 +159,7 @@ class _DetailPageState extends State<DetailPage> {
                           Padding(
                             padding: EdgeInsets.fromLTRB(0, 20, 0, 5),
                             child: Text(
-                              'Start of day snow water Eq\n ' + widget.startSnowWaterEq.toString(),
+                              'Start of day snow water Eq\n ' + widget.station.startSnowWaterEq.toString(),
                               textAlign: TextAlign.center,
                               style: TextStyle(fontSize: 22),
                               ),
@@ -236,15 +167,15 @@ class _DetailPageState extends State<DetailPage> {
                           Padding(
                             padding: EdgeInsets.fromLTRB(0, 20, 0, 5),
                             child: Text(
-                              'Change in Snow Water Eq\n ' + widget.changeInSnowWaterEq.toString(),
+                              'Change in Snow Water Eq\n ' + widget.station.changeInSnowWaterEq.toString(),
                               textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 22, color: getColor(widget.startSnowWaterEq, widget.changeInSnowWaterEq)),
+                              style: TextStyle(fontSize: 22, color: getColor(widget.station.startSnowWaterEq, widget.station.changeInSnowWaterEq)),
                               ),
                           ),
                           Padding(
                             padding: EdgeInsets.fromLTRB(0, 20, 0, 5),
                             child: Text(
-                              'Snow Depth Start of Day\n ' + widget.startSnowDepth.toString(),
+                              'Snow Depth Start of Day\n ' + widget.station.startSnowDepth.toString(),
                               textAlign: TextAlign.center,
                               style: TextStyle(fontSize: 22),
                               ),
@@ -252,9 +183,9 @@ class _DetailPageState extends State<DetailPage> {
                           Padding(
                             padding: EdgeInsets.fromLTRB(0, 20, 0, 5),
                             child: Text(
-                              'Change in Snow Depth\n ' + widget.changeSnowDepth.toString(),
+                              'Change in Snow Depth\n ' + widget.station.changeSnowDepth.toString(),
                               textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 22, color: getColor(widget.startSnowDepth, widget.changeSnowDepth)),
+                              style: TextStyle(fontSize: 22, color: getColor(widget.station.startSnowDepth, widget.station.changeSnowDepth)),
                               ),
                           ),
                         ],

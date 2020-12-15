@@ -1,37 +1,22 @@
-import 'dart:ffi';
+// import 'dart:ffi';
 
-import 'package:flutter/material.dart';
-import '../../app.dart';
-import '../../models/station.dart';
+// import 'package:flutter/material.dart';
+// import '../../app.dart';
+// import '../../models/station.dart';
 
-class Stations extends StatelessWidget {
-  Map<String, dynamic> station;
+// class Stations extends StatelessWidget {
+// final List<Station> station;
 
-  Stations(this.station);
+// Stations(this.station);
 
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: ListView.builder(  
-        shrinkWrap: true,
-        itemCount: station.length,
-        itemBuilder: (context, index) {
-          String key = station.keys.elementAt(index);
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding( 
+      
+//     );
+//   }
 
-          return Row(  
-            children: <Widget>[
-              Padding(  
-                padding: EdgeInsets.all(15.0),
-              ),
-              Text('$key : '),
-              Text(station[key].toString())
-            ],
-          );
-        }),
-      );
-  }
-
-  // _onLocationTap(BuildContext context, stationID) {
-  //   Navigator.pushNamed(context, StationDetailRoute, arguments: {'id': stationID});
-  // }
-}
+//   // _onLocationTap(BuildContext context, stationID) {
+//   //   Navigator.pushNamed(context, StationDetailRoute, arguments: {'id': stationID});
+//   // }
+// }
