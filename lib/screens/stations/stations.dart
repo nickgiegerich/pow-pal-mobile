@@ -5,9 +5,9 @@ import '../station_detail/station_detail.dart';
 
 // ignore: must_be_immutable
 class Stations extends StatefulWidget { 
-  List<Station> stations;
+  // List<Station> stations;
 
-  Stations(this.stations);
+  // Stations(this.stations);
 
   @override
   _StationsPageState createState() => _StationsPageState();
@@ -17,12 +17,13 @@ class Stations extends StatefulWidget {
 class _StationsPageState extends State<Stations> { 
   TextEditingController editingController = TextEditingController();
   List<Station> filteredStation;
+  List<Station> stations = [];
   @override
   void initState() { 
     super.initState();
     fetchAllStations().then((data){
         setState(() {
-          widget.stations = filteredStation = data;
+          stations = filteredStation = data;
         });
     });
   }
@@ -54,17 +55,17 @@ class _StationsPageState extends State<Stations> {
                 )
               ),
               Expanded(  
-                child: widget.stations.length > 0 ? ListView.builder(
-                        itemCount: widget.stations.length,
+                child: stations.length > 0 ? ListView.builder(
+                        itemCount: stations.length,
                         itemBuilder: (BuildContext context, int index) {
                           return ListTile(  
-                            title: Text(widget.stations[index].name),
+                            title: Text(stations[index].name),
                             onTap: () {
                               Navigator.push( 
                                 context,
                                 new MaterialPageRoute(  
                                   builder: (context) =>
-                                    StationDetail(widget.stations[index])
+                                    StationDetail(stations[index])
                                 )
                               );
                             },
@@ -81,7 +82,7 @@ class _StationsPageState extends State<Stations> {
 
   void _filterStations(value) { 
     setState(() {
-      widget.stations = filteredStation
+      stations = filteredStation
       .where((station) => 
         station.name.toLowerCase().contains(value.toLowerCase())).toList();
     });

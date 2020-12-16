@@ -16,21 +16,46 @@ class AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) { 
-    return MaterialApp(  
+    List<Station> stations = [];
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      onGenerateRoute: _routes(),
+      home: DefaultTabController(  
+        length: 3,
+        child: Scaffold ( 
+          appBar: AppBar(  
+            bottom: TabBar(  
+              tabs: [
+                Tab(icon: Icon(Icons.wifi_tethering), 
+                    text: 'stations',),
+                Tab(icon: Icon(Icons.map), text: 'avy map'),
+                Tab(icon: Icon(Icons.star_border), text: 'favorites',),
+              ],
+            ), 
+            title: Text('PowPal'),
+          ),
+          body: TabBarView(  
+            children: [
+              Stations(),
+              Icon(Icons.map),
+              Icon(Icons.star_border),
+            ],
+          ),
+        )
+      ),
       title: 'Snotel Stations',
       theme: _theme(),
-      onGenerateRoute: _routes(),
     );
   }
 
   RouteFactory _routes() {
     return(settings) {
+      print(settings.arguments);
       final Station station = settings.arguments;
-      List<Station> stations = [];
       Widget screen;
       switch(settings.name) { 
         case StationsRoute:
-          screen = Stations(stations);
+          screen = Stations();
           break;
         case StationDetailRoute:
           screen = StationDetail(station);
