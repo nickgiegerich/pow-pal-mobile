@@ -3,8 +3,10 @@ import 'package:pow_pal_app/models/station.dart';
 import 'models/station.dart';
 import 'screens/stations/stations.dart';
 import 'screens/station_detail/station_detail.dart';
+import 'screens/states/states.dart';
 
-const StationsRoute = '/';
+const StatesRoute = '/';
+const StationsRoute = '/stations';
 const StationDetailRoute = '/station_detail';
 
 class App extends StatefulWidget { 
@@ -16,7 +18,6 @@ class AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) { 
-    List<Station> stations = [];
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       onGenerateRoute: _routes(),
@@ -36,7 +37,7 @@ class AppState extends State<App> {
           ),
           body: TabBarView(  
             children: [
-              Stations(),
+              States(),
               Icon(Icons.map),
               Icon(Icons.star_border),
             ],
@@ -50,12 +51,15 @@ class AppState extends State<App> {
 
   RouteFactory _routes() {
     return(settings) {
-      print(settings.arguments);
       final Station station = settings.arguments;
+      final List<Station> stateStations = settings.arguments;
       Widget screen;
       switch(settings.name) { 
+        case StatesRoute:
+          screen = States();
+          break;
         case StationsRoute:
-          screen = Stations();
+          screen = Stations(stateStations);
           break;
         case StationDetailRoute:
           screen = StationDetail(station);

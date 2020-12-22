@@ -14,8 +14,6 @@ class Station {
         this.changeInSnowWaterEq, 
         this.startSnowDepth, 
         this.changeSnowDepth);
-
-
  }
  
 

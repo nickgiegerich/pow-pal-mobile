@@ -5,9 +5,9 @@ import '../station_detail/station_detail.dart';
 
 // ignore: must_be_immutable
 class Stations extends StatefulWidget { 
-  // List<Station> stations;
+  List<Station> stations;
 
-  // Stations(this.stations);
+  Stations(this.stations);
 
   @override
   _StationsPageState createState() => _StationsPageState();
@@ -17,14 +17,12 @@ class Stations extends StatefulWidget {
 class _StationsPageState extends State<Stations> { 
   TextEditingController editingController = TextEditingController();
   List<Station> filteredStation;
-  List<Station> stations = [];
+  // List<Station> stations = [];
   @override
   void initState() { 
     super.initState();
-    fetchAllStations().then((data){
-        setState(() {
-          stations = filteredStation = data;
-        });
+    setState(() {
+      filteredStation = widget.stations;
     });
   }
 
@@ -55,20 +53,22 @@ class _StationsPageState extends State<Stations> {
                 )
               ),
               Expanded(  
-                child: stations.length > 0 ? ListView.builder(
-                        itemCount: stations.length,
+                child: widget.stations.length > 0 ? ListView.builder(
+                        itemCount: widget.stations.length,
                         itemBuilder: (BuildContext context, int index) {
-                          return ListTile(  
-                            title: Text(stations[index].name),
-                            onTap: () {
-                              Navigator.push( 
-                                context,
+                          return Card( 
+                            child: ListTile(  
+                              title: Text(widget.stations[index].name),
+                              onTap: () {
+                                Navigator.push( 
+                                  context,
                                 new MaterialPageRoute(  
                                   builder: (context) =>
-                                    StationDetail(stations[index])
-                                )
-                              );
-                            },
+                                    StationDetail(widget.stations[index])
+                                  ),
+                                );
+                              },
+                            ),
                           );
                         }):Center(
                           child: CircularProgressIndicator(),
@@ -82,7 +82,7 @@ class _StationsPageState extends State<Stations> {
 
   void _filterStations(value) { 
     setState(() {
-      stations = filteredStation
+      widget.stations = filteredStation
       .where((station) => 
         station.name.toLowerCase().contains(value.toLowerCase())).toList();
     });
