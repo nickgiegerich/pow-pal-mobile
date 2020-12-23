@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:pow_pal_app/models/station.dart';
-import 'models/station.dart';
 import 'screens/stations/stations.dart';
 import 'screens/station_detail/station_detail.dart';
 import 'screens/states/states.dart';
+import 'models/state_snotel.dart';
 
 const StatesRoute = '/';
 const StationsRoute = '/stations';
@@ -37,7 +36,7 @@ class AppState extends State<App> {
           ),
           body: TabBarView(  
             children: [
-              States(),
+              StateSnotelPage(),
               Icon(Icons.map),
               Icon(Icons.star_border),
             ],
@@ -51,15 +50,15 @@ class AppState extends State<App> {
 
   RouteFactory _routes() {
     return(settings) {
-      final Station station = settings.arguments;
-      final List<Station> stateStations = settings.arguments;
+      final Stations station = settings.arguments;
+      final List<Stations> stateStations = settings.arguments;
       Widget screen;
       switch(settings.name) { 
         case StatesRoute:
-          screen = States();
+          screen = StateSnotelPage();
           break;
         case StationsRoute:
-          screen = Stations(stateStations);
+          screen = SnotelStations(stateStations);
           break;
         case StationDetailRoute:
           screen = StationDetail(station);

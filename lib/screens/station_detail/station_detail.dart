@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../models/station.dart';
+import '../../models/state_snotel.dart';
 
 class StationDetail extends StatefulWidget {
-  final Station station;
+  final Stations station;
 
   StationDetail(this.station);
 
@@ -71,9 +71,9 @@ class _DetailStationState extends State<StationDetail> {
                           Padding(
                             padding: EdgeInsets.fromLTRB(0, 20, 0, 5),
                             child: Text(
-                              'Change in Snow Water Eq\n ' + widget.station.changeInSnowWaterEq.toString(),
+                              'Change in Snow Water Eq\n ' + widget.station.changeSnowWaterEq.toString(),
                               textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 22, color: getColor(widget.station.startSnowWaterEq, widget.station.changeInSnowWaterEq)),
+                              style: TextStyle(fontSize: 22, color: getColor(widget.station.startSnowWaterEq, widget.station.changeSnowDepth)),
                               ),
                           ),
                           Padding(

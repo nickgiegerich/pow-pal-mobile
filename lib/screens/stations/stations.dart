@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import '../../api_calls/fetch_all_stations.dart';
-import '../../models/station.dart';
 import '../station_detail/station_detail.dart';
+import '../../screens/states/states.dart';
+import '../../models/state_snotel.dart';
 
 // ignore: must_be_immutable
-class Stations extends StatefulWidget { 
-  List<Station> stations;
+class SnotelStations extends StatefulWidget { 
+  List<Stations> stations;
 
-  Stations(this.stations);
+  SnotelStations(this.stations);
 
   @override
   _StationsPageState createState() => _StationsPageState();
 
 }
 
-class _StationsPageState extends State<Stations> { 
+class _StationsPageState extends State<SnotelStations> { 
   TextEditingController editingController = TextEditingController();
-  List<Station> filteredStation;
+  List<Stations> filteredStation;
   // List<Station> stations = [];
   @override
   void initState() { 

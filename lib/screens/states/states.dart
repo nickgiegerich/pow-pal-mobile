@@ -1,33 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pow_pal_app/api_calls/fetch_all_stations.dart';
-import 'package:pow_pal_app/models/station.dart';
-import '../../models/state.dart';
 import '../stations/stations.dart';
-import '../../api_calls/fetch_all_states.dart';
+import '../../models/state_snotel.dart';
+import 'package:http/http.dart' as http;
 
-class States extends StatefulWidget {
-
-  @override
-  _StatesPageState createState() => _StatesPageState();
-}
-
-
-
-
-class _StatesPageState extends State<States> {
-  List<StationState> listOfStates = [];
-  List<Station> stations = [];
-
-  @override
-  void initState() { 
-    super.initState();
-    fetchAllStations().then((value){
-      setState(() {
-        stations = value;
-        listOfStates = fetchAllStates(stations);
-      });
-    });
-  }
+class StateSnotelPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
@@ -39,29 +16,47 @@ class _StatesPageState extends State<States> {
         child: Column(  
           children: [
             Expanded(  
-              child: ListView.builder(
-                itemCount: listOfStates.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Card(  
-                    child: ListTile(  
-                      title: Text(listOfStates[index].name),
-                      onTap: () {
-                        Navigator.push( 
-                          context,
-                          new MaterialPageRoute(  
-                                  builder: (context) =>
-                                    Stations(listOfStates[index].stateStations)
-                                  ),
-                                );
-                              },
-                    ),
-                  );
-                }
+              child: FutureBuilder<List<StateSnotel>>(
+                future: fetchStateSnotels(http.Client()),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) print(snapshot.error);
+
+                  return snapshot.hasData ? StateList(states: snapshot.data) : Center(child: CircularProgressIndicator());
+                },
               ),
             )
           ],
         ),
       ),
+    );
+  }
+}
+
+class StateList extends StatelessWidget {
+  final List<StateSnotel> states;
+
+  StateList({ Key key, this.states}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) { 
+    return ListView.builder(
+      itemCount: states.length,
+      itemBuilder: (BuildContext context, int index) {
+        return Card(  
+          child: ListTile(  
+            title: Text(states[index].state),
+            onTap: () {
+              Navigator.push( 
+                context,
+                new MaterialPageRoute(  
+                  builder: (context) =>
+                    SnotelStations(states[index].stations)
+                )
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }
