@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'screens/stations/stations.dart';
 import 'screens/station_detail/station_detail.dart';
 import 'screens/states/states.dart';
+import 'screens/map/map.dart';
 import 'models/state_snotel.dart';
 
 const StatesRoute = '/';
@@ -37,7 +38,7 @@ class AppState extends State<App> {
           body: TabBarView(  
             children: [
               StateSnotelPage(),
-              Icon(Icons.map),
+              Map(),
               Icon(Icons.star_border),
             ],
           ),
