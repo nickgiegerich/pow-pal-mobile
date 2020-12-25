@@ -9,6 +9,10 @@
 .history
 .svn/
 
+# protect keys
+/ios/Runner/AppDelegate.swift
+/android/app/src/main/AndroidManifest.xml
+
 # IntelliJ related
 *.iml
 *.ipr
