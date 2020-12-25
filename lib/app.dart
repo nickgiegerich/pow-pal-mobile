@@ -4,6 +4,7 @@ import 'screens/station_detail/station_detail.dart';
 import 'screens/states/states.dart';
 import 'screens/map/map.dart';
 import 'models/state_snotel.dart';
+import 'package:location/location.dart';
 
 const StatesRoute = '/';
 const StationsRoute = '/stations';
