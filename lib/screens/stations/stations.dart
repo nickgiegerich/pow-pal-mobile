@@ -10,7 +10,7 @@ import '../../globals/global_favorites.dart' as global_fav;
 class SnotelStations extends StatefulWidget {
   List<Stations> stations;
 
-  SnotelStations(this.stations);
+  SnotelStations(this.stations);  
 
   @override
   _StationsPageState createState() => _StationsPageState();
