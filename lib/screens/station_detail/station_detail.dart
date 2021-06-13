@@ -1,6 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:pow_pal_app/style.dart';
+import 'package:pow_pal_app/constants/styles/style.dart';
 import '../../models/state_snotel.dart';
 import '../../globals/global_favorites.dart' as global_fav;
 import './temperature/hourly_air_temp.dart';
@@ -44,19 +44,27 @@ class _DetailStationState extends State<StationDetail> {
   }
 
   double _findMaxY() {
-    double max = widget.station.hourlyData[0].observedAirTemp;
+    double max = 0.0;
     List<HourlyData> tmpData = widget.station.hourlyData;
+    if (widget.station.hourlyData.isNotEmpty) {
+      max = widget.station.hourlyData[0].observedAirTemp;
+    }
     tmpData.forEach((data) {
       if (data.observedAirTemp > max) {
         max = data.observedAirTemp;
+      } else {
+        max = 0;
       }
     });
     return max + 5;
   }
 
   double _findMinY() {
-    double min = widget.station.hourlyData[0].observedAirTemp;
+    double min = 0.0;
     List<HourlyData> tmpData = widget.station.hourlyData;
+    if (widget.station.hourlyData.isNotEmpty) {
+      min = widget.station.hourlyData[0].observedAirTemp;
+    }
     tmpData.forEach((data) {
       if (data.observedAirTemp < min) {
         min = data.observedAirTemp;
@@ -147,7 +155,7 @@ class _DetailStationState extends State<StationDetail> {
       ),
       body: Column(
         children: <Widget>[
-          HourlyAirTemp(widget.station),  
+          HourlyAirTemp(widget.station),
         ],
       ),
     );

@@ -73,7 +73,7 @@ class AvalancheData  {
 }
 
 class Coordinates {
-  String id;
+  int id;
   double lat;
   double lon;
   int idOfArea;

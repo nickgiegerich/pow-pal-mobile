@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pow_pal_app/style.dart';
+import 'package:pow_pal_app/constants/styles/style.dart';
 import '../../api_calls/fetch_all_stations.dart';
 import '../station_detail/station_detail.dart';
 import '../../screens/states/states.dart';
@@ -10,7 +10,7 @@ import '../../globals/global_favorites.dart' as global_fav;
 class SnotelStations extends StatefulWidget {
   List<Stations> stations;
 
-  SnotelStations(this.stations);  
+  SnotelStations(this.stations);
 
   @override
   _StationsPageState createState() => _StationsPageState();
@@ -35,14 +35,17 @@ class _StationsPageState extends State<SnotelStations> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Snotel Stations', style: AppBarTextStyle,),
+        title: Text(
+          'Snotel Stations',
+          // style: AppBarTextStyle,
+        ),
         toolbarHeight: 65,
-        backgroundColor: Colors.transparent,
+        // backgroundColor: Colors.transparent,
         shape: BeveledRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  bottom: Radius.circular(35),
-                ),
-              ),
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(15),
+          ),
+        ),
       ),
       body: Container(
         child: Column(
@@ -69,7 +72,47 @@ class _StationsPageState extends State<SnotelStations> {
                       itemBuilder: (BuildContext context, int index) {
                         return Card(
                           child: ListTile(
-                            tileColor: listTileTheme().tileColor,
+                            // tileColor: listTileTheme().tileColor,
+                            isThreeLine: true,
+                            subtitle:
+                                widget.stations[index].hourlyData.length != 0
+                                    ? Text(
+                                        "Current Snow Depth: " +
+                                            widget
+                                                .stations[index]
+                                                .hourlyData[widget
+                                                        .stations[index]
+                                                        .hourlyData
+                                                        .length -
+                                                    1]
+                                                .snowDepth
+                                                .toString() +
+                                            '\n' +
+                                            "Current Temperature: " +
+                                            widget
+                                                .stations[index]
+                                                .hourlyData[widget
+                                                        .stations[index]
+                                                        .hourlyData
+                                                        .length -
+                                                    1]
+                                                .observedAirTemp
+                                                .toString() +
+                                            '\n' +
+                                            "Current Temperature: " +
+                                            widget
+                                                .stations[index]
+                                                .hourlyData[widget
+                                                        .stations[index]
+                                                        .hourlyData
+                                                        .length -
+                                                    1]
+                                                .dateTime
+                                                .toString(),
+                                      )
+                                    : Text("Current Snow Depth: N/A" +
+                                        "\n" +
+                                        "Current Temperature: N/A"),
                             contentPadding: listTileTheme().contentPadding,
                             title: Text(widget.stations[index].name),
                             trailing: IconButton(

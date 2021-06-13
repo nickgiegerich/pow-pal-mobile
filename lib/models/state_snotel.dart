@@ -1,7 +1,7 @@
 class StateSnotel {
   String state;
   String stateId;
-  List<Stations> stations;
+  List<Stations> stations = [];
 
   StateSnotel({this.state, this.stateId, this.stations});
 
@@ -9,7 +9,7 @@ class StateSnotel {
     state = json['state'];
     stateId = json['state_id'];
     if (json['stations'] != null) {
-      stations = new List<Stations>();
+      stations = new List<Stations>.empty(growable: true);
       json['stations'].forEach((v) {
         stations.add(new Stations.fromJson(v));
       });
@@ -31,8 +31,8 @@ class Stations {
   String id;
   String name;
   String state;
-  List<WeeklyData> weeklyData;
-  List<HourlyData> hourlyData;
+  List<WeeklyData> weeklyData = [];
+  List<HourlyData> hourlyData = [];
   // double startSnowWaterEq;
   // double changeSnowWaterEq;
   // double startSnowDepth;
@@ -55,13 +55,13 @@ class Stations {
     name = json['name'];
     state = json['state'];
     if (json['weekly_snow'] != null) {
-      weeklyData = new List<WeeklyData>();
+      weeklyData = new List<WeeklyData>.empty(growable: true);
       json['weekly_snow'].forEach((v) {
         weeklyData.add(new WeeklyData.fromJson(v));
       });
     }
     if (json['hourly_snow'] != null) {
-      hourlyData = new List<HourlyData>();
+      hourlyData = new List<HourlyData>.empty(growable: true);
       json['hourly_snow'].forEach((v) {
         hourlyData.add(new HourlyData.fromJson(v));
       });

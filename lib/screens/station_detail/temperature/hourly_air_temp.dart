@@ -1,6 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:pow_pal_app/style.dart';
+import 'package:pow_pal_app/constants/styles/style.dart';
 import '../../../models/state_snotel.dart';
 import '../../../globals/global_favorites.dart' as global_fav;
 
@@ -18,6 +18,7 @@ class _HourlyAirTempState extends State<HourlyAirTemp> {
     const Color(0xff707793),
     const Color(0xff3BBA9C),
   ];
+  FlSpot defaultSpot = new FlSpot(1, 1);
   List<FlSpot> spots = [];
   List<FlSpot> weeklySpots = [];
   double maxY = 0;
@@ -46,7 +47,7 @@ class _HourlyAirTempState extends State<HourlyAirTemp> {
       ),
       Row(
         children: [
-          RaisedButton(
+          ElevatedButton(
             onPressed: () {
               setState(
                 () {
@@ -109,7 +110,6 @@ class _HourlyAirTempState extends State<HourlyAirTemp> {
     tmp.forEach((element) {
       data.add(element.y);
     });
-    print(data);
     return data;
   }
 
@@ -123,8 +123,11 @@ class _HourlyAirTempState extends State<HourlyAirTemp> {
   }
 
   double _findWeeklyMaxY() {
-    double max = widget.station.hourlyData[0].observedAirTemp;
+    double max = 0.0;
     List<HourlyData> tmpData = widget.station.hourlyData;
+    if (widget.station.hourlyData.isNotEmpty) {
+      max = widget.station.hourlyData[0].observedAirTemp;
+    }
     tmpData.forEach((data) {
       if (data.observedAirTemp > max) {
         max = data.observedAirTemp;
@@ -134,8 +137,11 @@ class _HourlyAirTempState extends State<HourlyAirTemp> {
   }
 
   double _findMaxY() {
-    double max = widget.station.hourlyData[0].observedAirTemp;
+    double max = 0.0;
     List<HourlyData> tmpData = widget.station.hourlyData;
+    if (widget.station.hourlyData.isNotEmpty) {
+      max = widget.station.hourlyData[0].observedAirTemp;
+    }
     tmpData.forEach((data) {
       if (data.observedAirTemp > max) {
         max = data.observedAirTemp;
@@ -145,8 +151,11 @@ class _HourlyAirTempState extends State<HourlyAirTemp> {
   }
 
   double _findWeeklyMinY() {
-    double min = widget.station.hourlyData[0].observedAirTemp;
+    double min = 0.0;
     List<HourlyData> tmpData = widget.station.hourlyData;
+    if (widget.station.hourlyData.isNotEmpty) {
+      min = widget.station.hourlyData[0].observedAirTemp;
+    }
     tmpData.forEach((data) {
       if (data.observedAirTemp < min) {
         min = data.observedAirTemp;
@@ -156,8 +165,11 @@ class _HourlyAirTempState extends State<HourlyAirTemp> {
   }
 
   double _findMinY() {
-    double min = widget.station.hourlyData[0].observedAirTemp;
+    double min = 0.0;
     List<HourlyData> tmpData = widget.station.hourlyData;
+    if (widget.station.hourlyData.isNotEmpty) {
+      min = widget.station.hourlyData[0].observedAirTemp;
+    }
     tmpData.forEach((data) {
       if (data.observedAirTemp < min) {
         min = data.observedAirTemp;
@@ -318,7 +330,7 @@ class _HourlyAirTempState extends State<HourlyAirTemp> {
       lineBarsData: [
         LineChartBarData(
           show: true,
-          spots: spots,
+          spots: spots == null ? [defaultSpot] : [defaultSpot],
           isCurved: true,
           colors: gradientColors,
           barWidth: 5,
@@ -392,7 +404,7 @@ class _HourlyAirTempState extends State<HourlyAirTemp> {
       lineBarsData: [
         LineChartBarData(
           show: true,
-          spots: weeklySpots,
+          spots: weeklySpots == null ? [defaultSpot] : [defaultSpot],
           isCurved: true,
           colors: gradientColors,
           barWidth: 5,

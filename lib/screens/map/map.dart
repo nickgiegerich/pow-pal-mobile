@@ -26,7 +26,7 @@ class _MapPageState extends State<Map> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   // Completer<GoogleMapController> _controller = Completer();
   List<AvalancheData> avyData;
-  List<LatLng> _allDataPoints = List<LatLng>();
+  List<LatLng> _allDataPoints = List<LatLng>.empty(growable: true);
 
   Set<Polygon> _polygons = HashSet<Polygon>();
 
@@ -45,7 +45,7 @@ class _MapPageState extends State<Map> {
         setState(() {
           avyData = avyDataList;
           for (var data in avyDataList) {
-            List<LatLng> polygonLatLngs = List<LatLng>();
+            List<LatLng> polygonLatLngs = List<LatLng>.empty(growable: true);
             for (var point in data.coordinates) {
               LatLng newPoint = LatLng(point.lat, point.lon);
               polygonLatLngs.add(newPoint);
