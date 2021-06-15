@@ -28,7 +28,7 @@ class StateSnotelPage extends StatelessWidget {
                       : Center(child: CircularProgressIndicator());
                 },
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -65,16 +65,18 @@ class StateList extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                   color: Theme.of(context).colorScheme.onBackground),
             ),
+            subtitle: Text(states[index].stations.length.toString() + " stations"),
             trailing: Icon(
               Icons.arrow_forward_ios_sharp,
               color: Theme.of(context).colorScheme.secondary,
             ),
             onTap: () {
               Navigator.push(
-                  context,
-                  new MaterialPageRoute(
-                      builder: (context) =>
-                          SnotelStations(states[index].stations)));
+                context,
+                new MaterialPageRoute(
+                  builder: (context) => SnotelStations(states[index].stations),
+                ),
+              );
             },
           ),
         );

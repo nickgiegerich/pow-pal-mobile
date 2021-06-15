@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pow_pal_app/constants/styles/constants.dart';
-import 'package:pow_pal_app/screens/signin_signup/signin_or_signup_screen.dart';
+import 'package:pow_pal_app/screens/authenticate/signin_or_signup_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({Key key}) : super(key: key);
@@ -37,31 +37,32 @@ class WelcomeScreen extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 150, horizontal: 25),
           ),
           Positioned(
-              right: 25,
-              bottom: 80,
-              child: FittedBox(
-                child: TextButton(
-                  child: Row(
-                    children: [
-                      Text(
-                        "Let's Go!",
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      SizedBox(width: kDefaultPadding),
-                      Icon(
-                        Icons.arrow_forward_ios_outlined,
-                        color: Colors.black,
-                      )
-                    ],
-                  ),
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SigninOrSignup(),
+            right: 25,
+            bottom: 80,
+            child: FittedBox(
+              child: TextButton(
+                child: Row(
+                  children: [
+                    Text(
+                      "Let's Go!",
+                      style: TextStyle(color: Colors.black),
                     ),
+                    SizedBox(width: kDefaultPadding),
+                    Icon(
+                      Icons.arrow_forward_ios_outlined,
+                      color: Colors.black,
+                    )
+                  ],
+                ),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SigninOrSignup(),
                   ),
                 ),
-              ))
+              ),
+            ),
+          )
         ],
       ),
     );

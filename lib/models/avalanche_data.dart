@@ -1,8 +1,7 @@
-import 'dart:convert';
 
 class AvalancheData  {
   int id;
-  List<Coordinates> coordinates;
+  List<Coordinates> coordinates = [];
   String name;
   String center;
   String timezone;
@@ -33,7 +32,7 @@ class AvalancheData  {
   AvalancheData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     if (json['coordinates'] != null) {
-      coordinates = new List<Coordinates>();
+      coordinates = new List<Coordinates>.empty(growable: true);
       json['coordinates'].forEach((v) {
         coordinates.add(new Coordinates.fromJson(v));
       });

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'dart:collection';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -25,7 +27,7 @@ class _MapPageState extends State<Map> {
   Location _location = Location();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   // Completer<GoogleMapController> _controller = Completer();
-  List<AvalancheData> avyData;
+  List<AvalancheData> avyData = List<AvalancheData>.empty(growable: true);
   List<LatLng> _allDataPoints = List<LatLng>.empty(growable: true);
 
   Set<Polygon> _polygons = HashSet<Polygon>();
@@ -60,12 +62,11 @@ class _MapPageState extends State<Map> {
 
   void _onMapCreated(GoogleMapController _cntlr) {
     _controller = _cntlr;
-
-    _location.onLocationChanged.listen((l) {
+    _location.onLocationChanged.listen((l) { 
       _controller.animateCamera(
         CameraUpdate.newCameraPosition(
-          CameraPosition(target: LatLng(l.latitude, l.longitude), zoom: .5),
-        ),
+          CameraPosition(target: LatLng(l.latitude, l.longitude),zoom: 15),
+          ),
       );
     });
   }
@@ -152,75 +153,76 @@ class _MapPageState extends State<Map> {
       body: Stack(
         children: <Widget>[
           Positioned.fill(
-              child: GoogleMap(
-            mapType: MapType.terrain,
-            initialCameraPosition:
-                CameraPosition(target: _initialcameraposition),
-            onMapCreated: _onMapCreated,
-            polygons: _polygons,
-            myLocationEnabled: true,
-            gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
-              new Factory<OneSequenceGestureRecognizer>(
-                () => new EagerGestureRecognizer(),
-              ),
-            ].toSet(),
-            onTap: (latLng) {
-              _getAddress(latLng)
-                  ? showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        content: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            ListTile(
-                              leading: Icon(
-                                Icons.data_usage,
-                                color: _alertColor,
-                              ),
-                              title: Padding(
-                                padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
-                                child: Text(
-                                  _alertTitle,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
+            child: GoogleMap(
+              mapType: MapType.terrain,
+              initialCameraPosition:
+                  CameraPosition(target: _initialcameraposition),
+              onMapCreated: _onMapCreated,
+              polygons: _polygons,
+              myLocationEnabled: true,
+              gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
+                new Factory<OneSequenceGestureRecognizer>(
+                  () => new EagerGestureRecognizer(),
+                ),
+              ].toSet(),
+              onTap: (latLng) {
+                _getAddress(latLng)
+                    ? showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          content: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              ListTile(
+                                leading: Icon(
+                                  Icons.data_usage,
+                                  color: _alertColor,
+                                ),
+                                title: Padding(
+                                  padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
+                                  child: Text(
+                                    _alertTitle,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              subtitle: Text(
-                                _alertBody,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 18,
-                                    color: Colors.black87),
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                TextButton(
-                                  child: const Text('More Info'),
-                                  onPressed: () async {
-                                    final url = _alertLink;
-                                    if (await canLaunch(url)) {
-                                      await launch(
-                                        url,
-                                        forceSafariVC: false,
-                                      );
-                                    }
-                                  },
+                                subtitle: Text(
+                                  _alertBody,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 18,
+                                      color: Colors.black87),
                                 ),
-                                const SizedBox(width: 8),
-                              ],
-                            )
-                          ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  TextButton(
+                                    child: const Text('More Info'),
+                                    onPressed: () async {
+                                      final url = _alertLink;
+                                      if (await canLaunch(url)) {
+                                        await launch(
+                                          url,
+                                          forceSafariVC: false,
+                                        );
+                                      }
+                                    },
+                                  ),
+                                  const SizedBox(width: 8),
+                                ],
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                    )
-                  : printToConsoleNo();
-            },
-          ))
+                      )
+                    : printToConsoleNo();
+              },
+            ),
+          )
         ],
       ),
     );

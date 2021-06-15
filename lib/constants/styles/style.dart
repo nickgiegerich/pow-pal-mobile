@@ -56,7 +56,7 @@ ListTileTheme listTileTheme() {
   return ListTileTheme(
     tileColor: Color(0xFF3C3F58),
     iconColor: Color(0xFF3BBA9C),
-    contentPadding: EdgeInsets.all(35),
+    contentPadding: EdgeInsets.all(20),
     // shape: BorderRadius.all(),
     child: null,
   );

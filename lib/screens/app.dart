@@ -1,15 +1,12 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:pow_pal_app/constants/styles/constants.dart';
 import 'package:pow_pal_app/screens/favorites/favorites.dart';
+import 'package:pow_pal_app/screens/map/example_map.dart';
+import 'package:pow_pal_app/screens/user_profile/user_profile.dart';
 import 'stations/stations.dart';
 import 'station_detail/station_detail.dart';
 import 'states/states.dart';
 import 'map/map.dart';
 import '../models/state_snotel.dart';
-import 'package:location/location.dart';
-import '../constants/styles/style.dart';
 
 const StatesRoute = '/';
 const StationsRoute = '/stations';
@@ -31,6 +28,7 @@ class AppState extends State<App> {
     StateSnotelPage(),
     Favorites(),
     Map(),
+    UserProfile()
   ];
 
   @override
