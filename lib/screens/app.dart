@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pow_pal_app/screens/favorites/favorites.dart';
-import 'package:pow_pal_app/screens/map/example_map.dart';
 import 'package:pow_pal_app/screens/user_profile/user_profile.dart';
 import 'stations/stations.dart';
 import 'station_detail/station_detail.dart';

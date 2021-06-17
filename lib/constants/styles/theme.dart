@@ -19,7 +19,7 @@ ThemeData lightThemeData(BuildContext context) {
         primary: kPrimaryColor,
         secondary: kSecondaryColor,
         error: kErrorColor,
-        onBackground: Colors.black87),
+        onBackground: kOnBackgroundLightThemeColor),
     cardTheme: CardTheme(
       color: kContentColorDarkTheme,
       shape: RoundedRectangleBorder(
@@ -56,6 +56,7 @@ ThemeData darkThemeData(BuildContext context) {
       primary: kPrimaryColor,
       secondary: kSecondaryColor,
       error: kErrorColor,
+      onBackground: kOnBackgroundDarkThemeColor
     ),
     cardTheme: CardTheme(
       color: kContentColorLightTheme,

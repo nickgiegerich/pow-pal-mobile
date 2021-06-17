@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pow_pal_app/api_calls/fetch_all_stations.dart';
-import 'package:pow_pal_app/constants/styles/constants.dart';
 import 'package:pow_pal_app/constants/styles/style.dart';
 import '../stations/stations.dart';
 import '../../models/state_snotel.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class StateSnotelPage extends StatelessWidget {
   @override
@@ -25,14 +24,18 @@ class StateSnotelPage extends StatelessWidget {
 
                   return snapshot.hasData
                       ? StateList(states: snapshot.data)
-                      : Center(child: CircularProgressIndicator());
+                      : Center(
+                          child: SpinKitFoldingCube(
+                            color: Theme.of(context).colorScheme.onBackground,
+                            duration: const Duration(milliseconds: 1700),
+                          ),
+                        );
                 },
               ),
             ),
           ],
         ),
       ),
-      // backgroundColor: kContentColorLightTheme.withOpacity(0.9),
     );
   }
 }
@@ -65,7 +68,8 @@ class StateList extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                   color: Theme.of(context).colorScheme.onBackground),
             ),
-            subtitle: Text(states[index].stations.length.toString() + " stations"),
+            subtitle:
+                Text(states[index].stations.length.toString() + " stations"),
             trailing: Icon(
               Icons.arrow_forward_ios_sharp,
               color: Theme.of(context).colorScheme.secondary,

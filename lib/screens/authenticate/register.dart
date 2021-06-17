@@ -1,8 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pow_pal_app/constants/styles/constants.dart';
+import 'package:pow_pal_app/models/pow_pal_user.dart';
 import 'package:pow_pal_app/screens/authenticate/signin.dart';
 import 'package:pow_pal_app/services/auth.dart';
+
+import '../app.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -78,6 +81,13 @@ class _RegisterState extends State<Register> {
                         setState(() {
                           error = result.toString();
                         });
+                      } else if (result.runtimeType == PowPalUser) {
+                        return Navigator.pushReplacement(
+                          context,
+                          new MaterialPageRoute(
+                            builder: (BuildContext context) => App(),
+                          ),
+                        );
                       }
                     }
                   },

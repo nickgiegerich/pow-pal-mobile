@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pow_pal_app/models/pow_pal_user.dart';
+import 'package:pow_pal_app/services/database.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
   // create user obj based on User (Firebase class)
   PowPalUser _powPalUserFromUser(User user) {
@@ -30,6 +33,18 @@ class AuthService {
   }
 
   // sign in with email
+  Future signInWithEmailAndPassword(String email, String password) async {
+    try {
+      UserCredential result = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      User user = result.user;
+      return _powPalUserFromUser(user);
+    } catch (e) {
+      print('This is the error: ' + e.toString());
+      print(e.runtimeType);
+      return e;
+    }
+  }
 
   // register with email
   Future registerWithEmailAndPassword(String email, String password) async {
@@ -37,6 +52,9 @@ class AuthService {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       User user = result.user;
+
+      // create a new document for the user with the uid
+      await DatabaseService(uid: user.uid).updateUserData(null, null, null);
 
       return _powPalUserFromUser(user);
     } catch (e) {
@@ -56,3 +74,4 @@ class AuthService {
     }
   }
 }
+

@@ -16,3 +16,11 @@ const kDefaultPadding = 20.0;
 
 const testValPrim = Color(0xff3b0000);
 const kContentColorLightTheme2 = Color(0xFF000938);
+
+// dark theme constants
+const kOnBackgroundDarkThemeColor = Color(0xFFbcbcbc);
+
+// light theme constants
+const kOnBackgroundLightThemeColor = Color(0xFF1b1b1b);
+
+// shared constants
