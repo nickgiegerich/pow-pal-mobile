@@ -1,16 +1,15 @@
-# pow_pal_app
+# Pow Pal
 
-A new Flutter project.
+Pow Pal is a mobile application that stores snotel data, avalanche information and more all in one application. Allowing recreationaist and outdoor professionals quick access to important and potentially live saving data. 
 
-## Getting Started
+## Development 
 
-This project is a starting point for a Flutter application.
+This app is still under development and is anticipated to be released Fall 2021 for the 2021/22 Winter season. 
 
-A few resources to get you started if this is your first Flutter project:
+## Features
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+Currently application is able to display weekly and hourly data for each snotel station in the US.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+The application also has an avalanche map of the US with daily updates from each states respective Avalanche Centers
+
+
