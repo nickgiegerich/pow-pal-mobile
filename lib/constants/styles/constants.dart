@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 const kPrimaryColor = Color(0xff001e1d);
 const kSecondaryColor = Color(0xFF8c8c8c);
-const kAppBarDarkTheme = Color(0xFF003b3c);
+const kAppBarDarkTheme = Color(0xFF4F7942);
 const kAppBarLightTheme = Color(0xFFbcaaa4);
 const kScaffoldBackgroundLightTheme = Color(0xFFfafafa);
-const kScaffoldBackgroundDarkTheme = Color(0xFF013030);
+const kScaffoldBackgroundDarkTheme = Color(0xFF07151b);
 const kContentColorDarkTheme = Color(0xFFbdbdbd);
-const kContentColorLightTheme = Color(0xFF003b3c);
-const kIconColorDarkTheme = Color(0xFFf9683a);
+const kContentColorLightTheme = Color(0xFF07151b);
+const kIconColorDarkTheme = Color(0xFF006db3);
 const kWarninngColor = Color(0xFFa84600);
 const kErrorColor = Color(0xFF973529);
 

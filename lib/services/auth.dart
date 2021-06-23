@@ -40,8 +40,6 @@ class AuthService {
       User user = result.user;
       return _powPalUserFromUser(user);
     } catch (e) {
-      print('This is the error: ' + e.toString());
-      print(e.runtimeType);
       return e;
     }
   }
@@ -58,8 +56,6 @@ class AuthService {
 
       return _powPalUserFromUser(user);
     } catch (e) {
-      print('This is the error: ' + e.toString());
-      print(e.runtimeType);
       return e;
     }
   }

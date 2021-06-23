@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pow_pal_app/api_calls/fetch_all_stations.dart';
+import 'package:pow_pal_app/api_calls/fetch_states.dart';
 import 'package:pow_pal_app/constants/styles/style.dart';
+import 'package:pow_pal_app/models/state_model.dart';
+import 'package:pow_pal_app/screens/stations/station_list_screen.dart';
 import '../stations/stations.dart';
 import '../../models/state_snotel.dart';
 import 'package:http/http.dart' as http;
@@ -17,8 +20,8 @@ class StateSnotelPage extends StatelessWidget {
         child: Column(
           children: [
             Expanded(
-              child: FutureBuilder<List<StateSnotel>>(
-                future: fetchStateSnotels(http.Client()),
+              child: FutureBuilder<List<StateModel>>(
+                future: fetchStates(http.Client()),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) print(snapshot.error);
 
@@ -41,7 +44,7 @@ class StateSnotelPage extends StatelessWidget {
 }
 
 class StateList extends StatelessWidget {
-  final List<StateSnotel> states;
+  final List<StateModel> states;
 
   StateList({Key key, this.states}) : super(key: key);
 
@@ -56,32 +59,40 @@ class StateList extends StatelessWidget {
           shape: Theme.of(context).cardTheme.shape,
           margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
           elevation: 5,
-          child: ListTile(
-            // tileColor: listTileTheme().tileColor,
-            shape: listTileTheme().shape,
-            contentPadding: listTileTheme().contentPadding,
-            title: Text(
-              states[index].state.toString(),
-              style: TextStyle(
-                  // color: kContentColorDarkTheme,
-                  fontSize: 21.0,
-                  fontWeight: FontWeight.w600,
-                  color: Theme.of(context).colorScheme.onBackground),
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: Colors.white.withOpacity(0.3), width: 3.0),
+              ),
             ),
-            subtitle:
-                Text(states[index].stations.length.toString() + " stations"),
-            trailing: Icon(
-              Icons.arrow_forward_ios_sharp,
-              color: Theme.of(context).colorScheme.secondary,
+            child: ListTile(
+              // tileColor: listTileTheme().tileColor,
+              shape: listTileTheme().shape,
+              contentPadding: listTileTheme().contentPadding,
+              title: Text(
+                states[index].fullName.toString(),
+                style: TextStyle(
+                    // color: kContentColorDarkTheme,
+                    fontSize: 21.0,
+                    fontWeight: FontWeight.w600,
+                    color: Theme.of(context).colorScheme.onBackground),
+              ),
+              subtitle:
+                  Text(states[index].stationCount.toString() + " stations"),
+              trailing: Icon(
+                Icons.arrow_forward_ios_sharp,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                    builder: (context) =>
+                        StationListScreen(states[index].shortName.toString()),
+                  ),
+                );
+              },
             ),
-            onTap: () {
-              Navigator.push(
-                context,
-                new MaterialPageRoute(
-                  builder: (context) => SnotelStations(states[index].stations),
-                ),
-              );
-            },
           ),
         );
       },
@@ -92,33 +103,34 @@ class StateList extends StatelessWidget {
 AppBar buildAppBar(context) {
   return AppBar(
     automaticallyImplyLeading: false,
-    elevation: 3.0,
+    elevation: 0.0,
     title: Text(
       'Station Finder',
       style: Theme.of(context).appBarTheme.titleTextStyle,
     ),
     foregroundColor: Colors.black,
     actions: [
-      RawMaterialButton(
+      MaterialButton(
         onPressed: () {},
         elevation: 3.0,
-        fillColor: Theme.of(context).scaffoldBackgroundColor,
+        color: Theme.of(context).appBarTheme.iconTheme.color,
         child: Icon(
           Icons.search_outlined,
           color: Theme.of(context).colorScheme.onBackground,
         ),
         shape: CircleBorder(
           side: BorderSide(
-              width: 1.0, color: Theme.of(context).appBarTheme.color),
+              width: 6.0, color: Theme.of(context).colorScheme.background),
         ),
       )
     ],
     leadingWidth: 26,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(0),
-          topLeft: Radius.circular(0),
-          bottomRight: Radius.circular(5000)),
+        bottomLeft: Radius.circular(0),
+        topLeft: Radius.circular(0),
+        bottomRight: Radius.circular(5000),
+      ),
     ),
   );
 }

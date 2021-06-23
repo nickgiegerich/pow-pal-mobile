@@ -47,27 +47,29 @@ ThemeData darkThemeData(BuildContext context) {
   return ThemeData.dark().copyWith(
     primaryColor: kPrimaryColor,
     scaffoldBackgroundColor: kScaffoldBackgroundDarkTheme,
-    appBarTheme:
-        AppBarTheme(centerTitle: false, elevation: 5, color: kPrimaryColor),
+    appBarTheme: AppBarTheme(
+        centerTitle: false,
+        elevation: 5,
+        color: kAppBarDarkTheme,
+        iconTheme: IconThemeData(color: kIconColorDarkTheme)),
     iconTheme: IconThemeData(color: kContentColorDarkTheme),
     textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme)
         .apply(bodyColor: kContentColorDarkTheme),
     colorScheme: ColorScheme.dark().copyWith(
-      primary: kPrimaryColor,
-      secondary: kSecondaryColor,
-      error: kErrorColor,
-      onBackground: kOnBackgroundDarkThemeColor
-    ),
+        primary: kPrimaryColor,
+        secondary: kSecondaryColor,
+        error: kErrorColor,
+        onBackground: kOnBackgroundDarkThemeColor,
+        background: kScaffoldBackgroundDarkTheme),
     cardTheme: CardTheme(
       color: kContentColorLightTheme,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(10),
-          bottomLeft: Radius.circular(50),
+          topLeft: Radius.circular(0),
+          bottomLeft: Radius.circular(0),
           topRight: Radius.circular(0),
           bottomRight: Radius.circular(0),
         ),
-        side: BorderSide(width: 0, color: kPrimaryColor),
       ),
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(

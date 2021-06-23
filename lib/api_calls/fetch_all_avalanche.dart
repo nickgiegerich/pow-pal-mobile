@@ -8,7 +8,7 @@ final String herokuURL = 'https://pow-pal-api-dvl.herokuapp.com/';
 final String localURL = 'http://127.0.0.1:8000/';
 
 Future<List<AvalancheData>> fetchAvalancheData(http.Client client) async {
-  final response = await client.get(Uri.parse(herokuURL + 'avy-props/'));
+  final response = await client.get(Uri.parse(localURL + 'avy-props/'));
 
   return compute(parseAvalancheData, response.body);
 }
