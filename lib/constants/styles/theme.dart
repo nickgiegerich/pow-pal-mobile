@@ -48,15 +48,17 @@ ThemeData darkThemeData(BuildContext context) {
     primaryColor: kPrimaryColor,
     scaffoldBackgroundColor: kScaffoldBackgroundDarkTheme,
     appBarTheme: AppBarTheme(
-        centerTitle: false,
-        elevation: 5,
-        color: kAppBarDarkTheme,
-        iconTheme: IconThemeData(color: kIconColorDarkTheme)),
-    iconTheme: IconThemeData(color: kContentColorDarkTheme),
+      centerTitle: false,
+      elevation: 5,
+      color: kAppBarDarkTheme,
+      iconTheme: IconThemeData(color: kIconColorDarkTheme),
+    ),
+    iconTheme: IconThemeData(color: kContentColorDarkTheme.withOpacity(0.5)),
     textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme)
         .apply(bodyColor: kContentColorDarkTheme),
     colorScheme: ColorScheme.dark().copyWith(
         primary: kPrimaryColor,
+        primaryVariant: kAppBarDarkTheme,
         secondary: kSecondaryColor,
         error: kErrorColor,
         onBackground: kOnBackgroundDarkThemeColor,
@@ -73,7 +75,7 @@ ThemeData darkThemeData(BuildContext context) {
       ),
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: kPrimaryColor,
+      backgroundColor: kScaffoldBackgroundDarkTheme,
       selectedItemColor: Colors.white,
       unselectedItemColor: kContentColorDarkTheme.withOpacity(0.32),
       selectedIconTheme: IconThemeData(color: kIconColorDarkTheme),

@@ -62,7 +62,8 @@ class StateList extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               border: Border(
-                bottom: BorderSide(color: Colors.white.withOpacity(0.3), width: 3.0),
+                bottom: BorderSide(
+                    color: Colors.white.withOpacity(0.3), width: 3.0),
               ),
             ),
             child: ListTile(
@@ -77,8 +78,12 @@ class StateList extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                     color: Theme.of(context).colorScheme.onBackground),
               ),
-              subtitle:
-                  Text(states[index].stationCount.toString() + " stations"),
+              subtitle: Text(
+                states[index].stationCount.toString() + " stations",
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.3),
+                ),
+              ),
               trailing: Icon(
                 Icons.arrow_forward_ios_sharp,
                 color: Theme.of(context).colorScheme.secondary,
@@ -115,8 +120,9 @@ AppBar buildAppBar(context) {
         elevation: 3.0,
         color: Theme.of(context).appBarTheme.iconTheme.color,
         child: Icon(
-          Icons.search_outlined,
+          Icons.info_outlined,
           color: Theme.of(context).colorScheme.onBackground,
+          size: 35.0,
         ),
         shape: CircleBorder(
           side: BorderSide(
