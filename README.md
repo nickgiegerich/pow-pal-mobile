@@ -8,8 +8,11 @@ This app is still under development and is anticipated to be released Fall 2021 
 
 ## Features
 
-Currently application is able to display weekly and hourly data for each snotel station in the US.
+* Snotel Data
+* Avalanche Map
+* Geo Tagging for quick avalanche terrain reporting
+* Record daily trips
+* Backcountry partner finder
 
-The application also has an avalanche map of the US with daily updates from each states respective Avalanche Centers
 
 
